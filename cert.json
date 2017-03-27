@@ -1,0 +1,5 @@
+{
+    "data": "<BASE64-ENCODED-PFX",
+    "dataType": "pfx",
+    "password": "<PASSWORD FOR PFX>"
+}
