@@ -1,7 +1,24 @@
 # terraform-vm-keyvault
 🐧  Microsoft Azure Linux VM created with Terraform that uses Azure Key Vault
 
+## Getting Started
+
+* Create an [Azure Service Principal](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-authenticate-service-principal-cli)
+
+* Add credentials as environment variables
+
+```
+export ARM_SUBSCRIPTION_ID=""
+export ARM_CLIENT_ID=""
+export ARM_CLIENT_SECRET=""
+export ARM_TENANT_ID=""
+```
+
 * Create an Azure Key Vault service
+
+* Add previously created service principal in Access Policies
+
+* Make sure `Enable access to Azure Virtual Machines for deployment` is checked in Advanced Access Policies
 
 * Go to Properties of the service and add Resource ID into `terraform_keyvault_source_vault_id` in `terraform.tf`
 
