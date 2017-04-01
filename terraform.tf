@@ -26,6 +26,7 @@ resource "azurerm_public_ip" "demoterraformips" {
   location                     = "${var.terraform_azure_region}"
   resource_group_name          = "${azurerm_resource_group.demoterraform.name}"
   public_ip_address_allocation = "dynamic"
+  domain_name_label            = "${var.resource_group_name}"
 
   tags {
     environment = "TerraformDemo"
@@ -47,9 +48,13 @@ resource "azurerm_network_interface" "demoterraformnic" {
   }
 }
 
+resource "random_id" "storage" {
+  byte_length = 4
+}
+
 # create storage account
 resource "azurerm_storage_account" "demoterraformstorage" {
-  name                = "demoterraformstorage"
+  name                = "${random_id.storage.hex}"
   resource_group_name = "${azurerm_resource_group.demoterraform.name}"
   location            = "${var.terraform_azure_region}"
   account_type        = "Standard_LRS"
@@ -111,4 +116,21 @@ resource "azurerm_virtual_machine" "demoterraformvm" {
   tags {
     environment = "staging"
   }
+}
+
+resource "azurerm_virtual_machine_extension" "test" {
+  name                       = "terraformvmextension"
+  location                   = "${var.terraform_azure_region}"
+  resource_group_name        = "${azurerm_resource_group.demoterraform.name}"
+  virtual_machine_name       = "${azurerm_virtual_machine.demoterraformvm.name}"
+  publisher                  = "Microsoft.Azure.Extensions"
+  type                       = "CustomScript"
+  type_handler_version       = "2.0"
+  auto_upgrade_minor_version = true
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": ""
+    }
+SETTINGS
 }
